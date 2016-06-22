@@ -51,10 +51,16 @@ public class PurchaseTrackerController {
 
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model) {
+    public String home(Model model, String category) {
 
-        model.addAttribute("purchases", purchases.findAll());
-
+        Iterable<Purchase> pur;
+        if (category != null) {
+            pur = purchases.findByCategory(category);
+        }
+        else {
+            pur = purchases.findAll();
+        }
+        model.addAttribute("purchases", pur);
         return "home";
     }
 }
