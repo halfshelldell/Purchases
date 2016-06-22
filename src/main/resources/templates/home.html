@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+<table>
+    <tr>
+        <th style="text-align: left" scope="col">Name</th>
+        <th style="text-align: left" scope="col">Email</th>
+        <th style="text-align: left" scope="col">Category</th>
+        <th style="text-align: left" scope="col">Credit Card</th>
+        <th style="text-align: left" scope="col">CVV</th>
+        <th style="text-align: left" scope="col">Date</th>
+    </tr>
+{{#purchases}}
+    <tr>
+        <td>{{customer.name}}</td>
+        <td>{{customer.email}}</td>
+        <td>{{category}}</td>
+        <td>{{creditCard}}</td>
+        <td>{{cvv}}</td>
+        <td>{{date}}</td>
+    </tr>
+{{/purchases}}
+</table>
+</body>
+</html>
