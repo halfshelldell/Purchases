@@ -1,6 +1,9 @@
 package com.ironyard;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +35,7 @@ public class PurchaseTrackerController {
            while (scanner.hasNext()) {
                String line = scanner.nextLine();
                String[] columns = line.split(",");
-               Customer customer = new Customer(Integer.valueOf(columns[0]), columns[1], columns[2]);
+               Customer customer = new Customer(columns[0], columns[1]);
                customers.save(customer);
            }
        }
@@ -51,16 +54,28 @@ public class PurchaseTrackerController {
 
 
     @RequestMapping(path = "/", method = RequestMethod.GET)
-    public String home(Model model, String category) {
+    public String home(Model model, String category, Integer page) {
 
-        Iterable<Purchase> pur;
+        page = (page == null) ? 0 : page;
+
+        PageRequest pr = new PageRequest(page, 10);
+
+        Page<Purchase> pur;
         if (category != null) {
-            pur = purchases.findByCategory(category);
+            pur = purchases.findByCategory(pr, category);
         }
         else {
-            pur = purchases.findAll();
+            pur = purchases.findAll(pr);
         }
         model.addAttribute("purchases", pur);
+        model.addAttribute("category", category);
+
+        model.addAttribute("nextPage",  page + 1);
+        model.addAttribute("showNext", pur.hasNext());
+
+        model.addAttribute("prevPage",  page - 1);
+        model.addAttribute("showPrev", pur.hasPrevious());
+
         return "home";
     }
 }
